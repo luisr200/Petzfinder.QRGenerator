@@ -68,7 +68,7 @@ namespace Petzfinder.QRGenerator
                 try
                 {
                     await fileTransferUtility.UploadAsync(stream,
-                                               bucketName, $"{value.S}.svg");
+                                               bucketName, $"{value.S}.png");
                 }
                 catch (AmazonS3Exception e)
                 {
