@@ -61,21 +61,14 @@ namespace Petzfinder.QRGenerator
                 var value = new AttributeValue();
                 item.TryGetValue("tagId", out value);
                 QRCodeGenerator qrGenerator = new QRCodeGenerator();
-                QRCodeData qrCodeData = qrGenerator.CreateQrCode($"http://petzfinder/tags/{ value.S }", QRCodeGenerator.ECCLevel.Q); ;
-                QRCode qrCode = new QRCode(qrCodeData);
-                Bitmap bitmap = qrCode.GetGraphic(20);
-                //var stream = new MemoryStream();
-                //var qr = QrCode.EncodeText($"http://petzfinder/tags/{ value.S }", QrCode.Ecc.Medium);
-                //using (var bitmap = qr.ToBitmap(4, 10))
-                //{
-                //    bitmap.Save("qr-code.png", ImageFormat.Png);
-                //    stream = BitmapToStream(bitmap);
-                //}
+                QRCodeData qrCodeData = qrGenerator.CreateQrCode($"https://petzfinder.net/tag/{ value.S }", QRCodeGenerator.ECCLevel.Q); ;
+                BitmapByteQRCode qrCode = new BitmapByteQRCode(qrCodeData);
+                var bitmap = qrCode.GetGraphic(2);
+                var stream = new MemoryStream(bitmap);
                 try
                 {
-                    var stream = BitmapToStream(bitmap);
                     await fileTransferUtility.UploadAsync(stream,
-                                               bucketName, value.S);
+                                               bucketName, $"{value.S}.svg");
                 }
                 catch (AmazonS3Exception e)
                 {
